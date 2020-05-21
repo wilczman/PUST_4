@@ -23,55 +23,39 @@ Y{1}(1:11)=Y_pp;
 Y{2}(1:11)=Y_pp;
 Y{3}(1:11)=Y_pp;
 
+matrice=zeros(1,kk)+1;
+matrice(1:5)=0
 for i=1:4
-    for j=1:3
-        U{i}=zeros(1, kk)+1;
-        for k=1:kk
-           if k>4
-                [Y{1}(k),Y{2}(k),Y{3}(k)] = symulacja_obiektu5( ...
-                U{1}(k-1),U{1}(k-2),U{1}(k-3),U{1}(k-4),...
-                U{2}(k-1),U{2}(k-2),U{2}(k-3),U{2}(k-4),...
-                U{3}(k-1),U{3}(k-2),U{3}(k-3),U{3}(k-4),...
-                U{4}(k-1),U{4}(k-2),U{4}(k-3),U{4}(k-4),...
-                Y{1}(k-1),Y{1}(k-2),Y{1}(k-3),Y{1}(k-4),...
-                Y{2}(k-1),Y{2}(k-2),Y{2}(k-3),Y{2}(k-4),...
-                Y{3}(k-1),Y{3}(k-2),Y{3}(k-3),Y{3}(k-4));  
-           end
-        end
-        odp_skok{i,j}{1} = Y{1}; Y{1} = zeros(1, kk);
-        odp_skok{i,j}{2} = Y{2}; Y{2} = zeros(1, kk);
-        odp_skok{i,j}{3} = Y{3}; Y{3} = zeros(1, kk);
-        U{i} = zeros(1, kk);
+    U{i}(5, kk)=zeros(5, kk)+1;
+    for k=1:kk
+       if k>4
+            [Y{1}(k),Y{2}(k),Y{3}(k)] = symulacja_obiektu5( ...
+            U{1}(k-1),U{1}(k-2),U{1}(k-3),U{1}(k-4),...
+            U{2}(k-1),U{2}(k-2),U{2}(k-3),U{2}(k-4),...
+            U{3}(k-1),U{3}(k-2),U{3}(k-3),U{3}(k-4),...
+            U{4}(k-1),U{4}(k-2),U{4}(k-3),U{4}(k-4),...
+            Y{1}(k-1),Y{1}(k-2),Y{1}(k-3),Y{1}(k-4),...
+            Y{2}(k-1),Y{2}(k-2),Y{2}(k-3),Y{2}(k-4),...
+            Y{3}(k-1),Y{3}(k-2),Y{3}(k-3),Y{3}(k-4));  
+       end
     end
+    odp_skok{i}{1} = Y{1}; Y{1} = zeros(1, kk);
+    odp_skok{i}{2} = Y{2}; Y{2} = zeros(1, kk);
+    odp_skok{i}{3} = Y{3}; Y{3} = zeros(1, kk);
+    U{i} = zeros(1, kk);
 end
 
 %WYKRESY
     figure 
     hold on;
-    for i=1
+    for i=1:4
+        subplot(4,3,i*3-2); stairs(odp_skok{i}{1});title(sprintf('Skok sygna³u steruj¹cego u%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u y1(k)');
+        subplot(4,3,i*3-1); stairs(odp_skok{i}{2});title(sprintf('Skok sygna³u steruj¹cego u%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u y2(k)');
+        subplot(4,3,i*3); stairs(odp_skok{i}{3});title(sprintf('Skok sygna³u steruj¹cego u%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u y3(k)');
+    end
+ 
+
     
-    subplot(7,1,1);
-    stairs(Y{1});
-    title('Wyjœcie y1(k)');xlabel('k');ylabel('wartoœæ sygna³u');
-    subplot(7,1,2);
-    stairs(Y{2});
-    title('Wyjœcie y2(k)');xlabel('k');ylabel('wartoœæ sygna³u');
-    subplot(7,1,3);
-    stairs(Y{3});
-    title('Wyjœcie y3(k)');xlabel('k');ylabel('wartoœæ sygna³u');   
-    
-    subplot(7,1,4);
-    stairs(U{1});
-    title('Sygna³ steruj¹cy u1(k)');xlabel('k');ylabel('wartoœæ sygna³u');
-    subplot(7,1,5);
-    stairs(U{2});
-    title('Sygna³ steruj¹cy u2(k)');xlabel('k');ylabel('wartoœæ sygna³u');
-    subplot(7,1,6);
-    stairs(U{3});
-    title('Sygna³ steruj¹cy u3(k)');xlabel('k');ylabel('wartoœæ sygna³u');
-    subplot(7,1,7);
-    stairs(U{4});
-    title('Sygna³ steruj¹cy u4(k)');xlabel('k');ylabel('wartoœæ sygna³u');
     
 
 %%%ZAPIS DO PLIKU%%%%%%%

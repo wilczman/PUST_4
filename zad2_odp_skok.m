@@ -23,8 +23,11 @@ Y{1}(1:11)=Y_pp;
 Y{2}(1:11)=Y_pp;
 Y{3}(1:11)=Y_pp;
 
+matrice=zeros(1,kk)+1;
+matrice(1:4)=0;
+
 for i=1:4
-    U{i}=zeros(1, kk)+1;
+    U{i}=matrice;
     for k=1:kk
        if k>4
             [Y{1}(k),Y{2}(k),Y{3}(k)] = symulacja_obiektu5( ...
