@@ -1,7 +1,10 @@
 clear all;
-K = [ 1 1 1];
-Ti = [ 1 1 1];
-Td = [ 1 1 1];
+K = [ 5.12171662291630 16.6354570772272 66.5412970097712]; %K = [ 0.1765 0.282 1.1302];
+% [5.12171662291630,4.98419437642965,0.00100110799358158]
+% [16.6354570772272,9.96250610426429,0.00101660251269096]
+% [66.5412970097712,9.96198286561614,0.00102068261375506]
+Ti = [ 4.98419437642965 4.98419437642965 9.96198286561614];
+Td = [ 0.00100110799358158 0.00100110799358158 0.00102068261375506];
 
 %inicjalizacja
 %Punkt Pracy
@@ -47,9 +50,9 @@ u{3}=zeros(1,kk);
 % yzad(round(3*kk/7):round(4*kk/7))=0.2;
 % yzad(round(4*kk/7):round(5*kk/7))=1.1;
 % yzad(round(5*kk/7):round(7*kk/7))=3;
-yzad{1}(1:kk/2)=1;
-yzad{2}(1:kk/2)=1;
-yzad{3}(1:kk/2)=1;
+yzad{1}(kk/2:kk)=1;
+yzad{2}(kk/2:kk)=1;
+yzad{3}(kk/2:kk)=1;
 yzad{1}=yzad{1}-Ypp;
 yzad{2}=yzad{2}-Ypp;
 yzad{3}=yzad{3}-Ypp;
@@ -86,7 +89,7 @@ for k=5:kk %g³ówna pêtla symulacyjna
     %sygna³ steruj¹cy regulatora PID
     %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
     for i=1:3
-        delta_u{i}=r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
+        delta_u{i}= r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
     end
     
     for i=1:3
@@ -107,4 +110,12 @@ for i=1:3
     wskaznik_jakosci{i}=sum(e{i}.^2);
 end   
 
-
+% figure 
+hold on;
+for i=1:3
+    subplot(7,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');
+end
+for i=1:4
+    subplot(7,1,i+3); stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');
+end
+hold off
