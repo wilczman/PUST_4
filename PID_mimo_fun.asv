@@ -60,7 +60,7 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
     yzad{3}=yzad{3}-Ypp;
 
     T=0.5;
-    r0=[0; 0; 0; 0;]; r1=[0; 0; 0; 0;]; r2=[0; 0; 0; 0;];
+    r0=[0; 0; 0;]; r1=[0; 0; 0;]; r2=[0; 0; 0;];
 
     
         r2(nr)=K(nr)*Td(nr)/T;
@@ -91,7 +91,7 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
         %sygna³ steruj¹cy regulatora PID
         %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
         for i=1:4
-            delta_u{i}=r2(i)*e{3}(k-2)+r1(i)*e{3}(k-1)+r0(i)*e{3}(k);
+            delta_u{i}=r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
         end
 
 %         u{1}(k)=delta_u{1}+u{1}(k-1);
