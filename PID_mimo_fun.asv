@@ -3,9 +3,15 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
     K = [ 0; 0; 0; 0;]; %K = [ 0.1765 0.282 1.1302];
     Ti = [ 10000; 10000; 10000;10000;];
     Td = [ 0; 0; 0;0;];
-    K(nr)   =   parameters(1);
-    Ti(nr)  =   parameters(2);
-    Td(nr)  =   parameters(3);
+    K(1)   =   parameters(1);
+    Ti(1)  =   parameters(2);
+    Td(1)  =   parameters(3);
+    K(2)   =   parameters(4)
+    Ti(2)  =   parameters(5);
+    Td(2)  =   parameters(6);
+    K(3)   =   parameters(7);
+    Ti(3)  =   parameters(8);
+    Td(3)  =   parameters(9);
 
     %inicjalizacja
     %Punkt Pracy
@@ -60,7 +66,7 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
     yzad{3}=yzad{3}-Ypp;
 
     T=0.5;
-    r0=[0; 0; 0;]; r1=[0; 0; 0;]; r2=[0; 0; 0;];
+    r0=[0; 0; 0; 0;]; r1=[0; 0; 0; 0;]; r2=[0; 0; 0; 0;];
 
     
         r2(nr)=K(nr)*Td(nr)/T;
@@ -91,7 +97,7 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
         %sygna³ steruj¹cy regulatora PID
         %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
         for i=1:4
-            delta_u{i}=r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
+            delta_u{i}=r2(i)*e{3}(k-2)+r1(i)*e{3}(k-1)+r0(i)*e{3}(k);
         end
 
 %         u{1}(k)=delta_u{1}+u{1}(k-1);

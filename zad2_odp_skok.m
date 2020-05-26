@@ -59,33 +59,34 @@ end
     
     
 
-%%%ZAPIS DO PLIKU%%%%%%%
+% %%%ZAPIS DO PLIKU%%%%%%%
 % j=0; k=0;
+% numU=4;numY=;
 % for k=1:kk       
 %        j=j+1;
 %        table_Y(1,k)=double(j);
-%        table_U(1,k)=double(j);
+% %        table_U(1,k)=double(j);
 % end
 % %macierze wykorzystane do zapisu
-% table_Y(2,:)=Y;
-% table_U(2,:)=U;
+% table_Y(2,:)=odp_skok{numU}{numY};
+% % table_U(2,:)=U;
 % 
-% fname_Y = sprintf('ppY.txt');
-% fname_U = sprintf('ppU.txt');
-% mkdir_status_Y=mkdir(sprintf('C:\\Users\\Kuba\\Desktop\\GIT\\PUST_3\\wykres_punkt_pracy'));
+% fname_Y = sprintf('odp_skok_U%d_Y%d.txt',numU,numY);
+% % fname_U = sprintf('odp_skok_U.txt');
+% mkdir_status_Y=mkdir(sprintf('C:\\Users\\Kuba\\Desktop\\GIT\\PUST_4\\odp_skok_'));
 % if mkdir_status_Y
-%    savdir_Y = sprintf('C:\\Users\\Kuba\\Desktop\\GIT\\PUST_3\\wykres_punkt_pracy\\');
+%    savdir_Y = sprintf('C:\\Users\\Kuba\\Desktop\\GIT\\PUST_4\\odp_skok_\\');
 % 
 %    fileID = fopen([savdir_Y fname_Y],'w');
 %    fprintf(fileID,'%6.3f %6.3f\r\n',table_Y);
 %    fclose(fileID);
-%    fileID = fopen([savdir_Y fname_U],'w');
-%    fprintf(fileID,'%6.3f %6.3f\r\n',table_U);
-%    fclose(fileID);
+% %    fileID = fopen([savdir_Y fname_U],'w');
+% %    fprintf(fileID,'%6.3f %6.3f\r\n',table_U);
+% %    fclose(fileID);
 %    
 % else 
 %    disp('Nie udalo sie stworzyc folderów')
 % end
 % warning('on','all') %wlaczenie warningow
-
-   
+% 
+%    

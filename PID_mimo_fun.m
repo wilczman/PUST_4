@@ -3,9 +3,15 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
     K = [ 0; 0; 0; 0;]; %K = [ 0.1765 0.282 1.1302];
     Ti = [ 10000; 10000; 10000;10000;];
     Td = [ 0; 0; 0;0;];
-    K(nr)   =   parameters(1);
-    Ti(nr)  =   parameters(2);
-    Td(nr)  =   parameters(3);
+    K(1)   =   parameters(1);
+    Ti(1)  =   parameters(2);
+    Td(1)  =   parameters(3);
+    K(2)   =   parameters(4);
+    Ti(2)  =   parameters(5);
+    Td(2)  =   parameters(6);
+    K(3)   =   parameters(7);
+    Ti(3)  =   parameters(8);
+    Td(3)  =   parameters(9);
 
     %inicjalizacja
     %Punkt Pracy
@@ -52,21 +58,27 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
     % yzad(round(3*kk/7):round(4*kk/7))=0.2;
     % yzad(round(4*kk/7):round(5*kk/7))=1.1;
     % yzad(round(5*kk/7):round(7*kk/7))=3;
-    yzad{1}(1:kk/2)=1;
-    yzad{2}(1:kk/2)=1;
-    yzad{3}(1:kk/2)=1;
+%     yzad{1}(1:kk/2)=1;
+%     yzad{2}(1:kk/2)=1;
+%     yzad{3}(1:kk/2)=1;
+yzad{1}(2*kk/5:3*kk/5)=1;
+yzad{1}(4*kk/5:5*kk/5)=2;
+yzad{2}(2*kk/5:3*kk/5)=3;
+yzad{2}(4*kk/5:5*kk/5)=4;
+yzad{3}(1*kk/5:2*kk/5)=-1;
+yzad{3}(3*kk/5:5*kk/5)=-2;
     yzad{1}=yzad{1}-Ypp;
     yzad{2}=yzad{2}-Ypp;
     yzad{3}=yzad{3}-Ypp;
 
     T=0.5;
-    r0=[0; 0; 0; 0;]; r1=[0; 0; 0; 0;]; r2=[0; 0; 0; 0;];
+    r0=[0; 0; 0; ]; r1=[0; 0; 0;]; r2=[0; 0; 0;];
 
-    
+    for nr=1:3
         r2(nr)=K(nr)*Td(nr)/T;
         r1(nr)=K(nr)*(T/(2*Ti(nr))-2*Td(nr)/T-1);
         r0(nr)=K(nr)*(1+T/(2*Ti(nr))+Td(nr)/T);
-    
+    end 
 
     for k=5:kk %g³ówna pêtla symulacyjna
         %symulacja obiektu    
@@ -83,36 +95,38 @@ function wskaznik_jakosci=PID_mimo_fun(parameters,nr)
             y{i}(k)=Y{i}(k)-Ypp;
         end
 
-        %uchyb regulacji
-        for i=1:3
-            e{i}(k)=yzad{i}(k)-y{i}(k);
-        end
-
-        %sygna³ steruj¹cy regulatora PID
-        %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
-        for i=1:4
-            delta_u{i}=r2(i)*e{3}(k-2)+r1(i)*e{3}(k-1)+r0(i)*e{3}(k);
-        end
-
-%         u{1}(k)=delta_u{1}+u{1}(k-1);
-%         u{2}(k)=delta_u{2}+u{2}(k-1);
-%         u{4}(k)=delta_u{3}+u{4}(k-1);
-          u{nr}(k)=delta_u{nr}+u{nr}(k-1);
-
-
-    %     if u(k)>u_max
-    %         u(k)=u_max;
-    %     elseif u(k)<u_min
-    %         u(k)=u_min;
-    %     end
-
-%         U{1}(k)=u{1}(k)+Upp;
-%         U{2}(k)=u{1}(k)+Upp;
-%         U{4}(k)=u{1}(k)+Upp;
-            U{nr}(k)=u{nr}(k)+Upp;
+   %uchyb regulacji
+    for i=1:3
+        e{i}(k)=yzad{i}(k)-y{i}(k);
+    end
+    
+    %sygna³ steruj¹cy regulatora PID
+    %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
+    for i=1:3
+        delta_u{i}= r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
+    end
+    
+   
+    u{1}(k)=delta_u{1}+u{1}(k-1);
+    u{2}(k)=delta_u{2}+u{2}(k-1);
+    u{4}(k)=delta_u{3}+u{4}(k-1);
+   
+    
+%     if u(k)>u_max
+%         u(k)=u_max;
+%     elseif u(k)<u_min
+%         u(k)=u_min;
+%     end
+    
+%     U{1}(k)=u{1}(k)+Upp;
+%     U{2}(k)=u{2}(k)+Upp;
+%     U{4}(k)=u{4}(k)+Upp;
+    U{1}(k)=u{1}(k)+Upp;
+    U{2}(k)=u{2}(k)+Upp;
+    U{4}(k)=u{4}(k)+Upp;
             
         
     end
-    wskaznik_jakosci=sum(e{3}.^2);
+    wskaznik_jakosci=sum(e{1}.^2)+sum(e{2}.^2)+sum(e{3}.^2);
     
 end
