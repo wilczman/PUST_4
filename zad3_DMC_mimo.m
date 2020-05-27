@@ -147,12 +147,12 @@ close all
         deltaUP((nu+1):nu*(D-1), 1)=deltaUP(1:nu*(D-1)-nu, 1);
         deltaUP(1:nu,1) = u(k-1,:)'-u(k-2,:)';
         
-
-        Y0=Y_wek+Mp*deltaUP;
-        deltaU=K*(Yzad-Y0);
-        deltaY=M*deltaU;
-        
-        Y_ptak=Y0+deltaY;
+        %zakomentowane linijki poni¿ej nie s¹ potrzebne do wersji
+        %oszczednej
+        %Y0=Y_wek+Mp*deltaUP;
+        %deltaU=K*(Yzad-Y0);
+        %deltaY=M*deltaU;      
+        %Y_ptak=Y0+deltaY;
         
         delta_u=K1*(Yzad-Y_wek-Mp*deltaUP);
         
