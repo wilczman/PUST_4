@@ -3,14 +3,13 @@ clear all;
 % [5.13025718870210,5.00005693573576,0.000206770721584062]
 % [16.6637228561278,9.99507713207827,0.000188732555003929]
 % [8.33667801082710,5.00009137228757,0.000206455484624513]
-K = [ 0.13 0.46 0.63]; 
-Ti = [ 5.0 10 5.00];
-Td = [0.0002 0.0002 0.0002];
+% K = [ 0.13 0.46 0.63]; 
+% Ti = [ 5.0 10 5.00];
+% Td = [0.0002 0.0002 0.0002];
 % nastawy fmincon
-[,0.239148419236459,0.162611868606266,1.62210438344403,12.9576801974330,0.0117413247311129,7.59312580102691,33.3964747069558,0.0116427647126501]
-% K = [ 00.0553407143407280 0.0494561554328533 1.61079896785455]; 
-% Ti = [ 1.59937413737860 11.0217306109800 0.0160036256406587];
-% Td = [7.15676292059764 13.3444155873387 0.0177744036099591];
+K = [ 0.0267924004841785 0.486626903336784 0.00731372418273780]; 
+Ti = [ 0.310555345098582 8.85550239529977 0.00166096196945139];
+Td = [0.00414786381512143 1.0856267509401211129 441.372978765834];
 
 %inicjalizacja
 %Punkt Pracy
@@ -52,17 +51,19 @@ u{2}=zeros(1,kk);
 u{3}=zeros(1,kk);
 u{4}=zeros(1,kk);
 
-% yzad(round(1*kk/7):round(2*kk/7))=4;
-% yzad(round(2*kk/7):round(3*kk/7))=0;
-% yzad(round(3*kk/7):round(4*kk/7))=0.2;
-% yzad(round(4*kk/7):round(5*kk/7))=1.1;
-% yzad(round(5*kk/7):round(7*kk/7))=3;
-yzad{1}(2*kk/5:3*kk/5)=1;
-yzad{1}(4*kk/5:5*kk/5)=2;
-yzad{2}(2*kk/5:3*kk/5)=3;
-yzad{2}(4*kk/5:5*kk/5)=4;
-yzad{3}(1*kk/5:2*kk/5)=-1;
-yzad{3}(3*kk/5:5*kk/5)=-2;
+
+% yzad{1}(2*kk/5:3*kk/5)=1;
+% yzad{1}(4*kk/5:5*kk/5)=2;
+% yzad{2}(2*kk/5:3*kk/5)=3;
+% yzad{2}(4*kk/5:5*kk/5)=4;
+% yzad{3}(1*kk/5:2*kk/5)=-1;
+% yzad{3}(3*kk/5:5*kk/5)=-2;
+yzad{1}(2*kk/5:3*kk/5)=-1;
+yzad{1}(4*kk/5:5*kk/5)=-5;
+yzad{2}(2*kk/5:3*kk/5)=2;
+yzad{2}(4*kk/5:5*kk/5)=1;
+yzad{3}(1*kk/5:2*kk/5)=-5;
+yzad{3}(3*kk/5:5*kk/5)=3;
 
 yzad{1}=yzad{1}-Ypp;
 yzad{2}=yzad{2}-Ypp;
@@ -128,7 +129,7 @@ end
 for i=1:3
     wskaznik_jakosci{i}=sum(e{i}.^2);
 end   
-wskaznik_jakosci_ogolny = wskaznik_jakosci{1}+ wskaznik_jakosci{2}+ wskaznik_jakosci{3};
+wskaznik_jakosci_ogolny = sum(e{1}.^2)+sum(e{2}.^2)+sum(e{3}.^2);
 % figure 
 hold on;
 for i=1:3
@@ -138,4 +139,20 @@ end
 for i=1:4
     subplot(7,1,i+3); stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
 end
+
+
+
+
+for i=1:3
+    figure;
+    stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
+    hold on;plot(yzad{i});
+    matlab2tikz('a_tex.tex','showInfo',false);
+end
+for i=1:4
+    figure;
+    stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
+    matlab2tikz(    sprintf('a_tex.tex','showInfo',false);
+end
+
 hold off

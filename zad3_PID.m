@@ -7,8 +7,6 @@ clear all;
 % Ti = [ 5.0 10 5.00];
 % Td = [0.0002 0.0002 0.0002];
 % nastawy fmincon
-%[,,,,,,,,]
-% [0.258485614464798,0.282752548628794,0.179505130129204,1.60914260132909,9.69785413059631,0.0119083343680935,7.09977416291000,6.30036756439549,0.0222190498275287]
 K = [ 0.0267924004841785 0.486626903336784 0.00731372418273780]; 
 Ti = [ 0.310555345098582 8.85550239529977 0.00166096196945139];
 Td = [0.00414786381512143 1.0856267509401211129 441.372978765834];
@@ -141,4 +139,22 @@ end
 for i=1:4
     subplot(7,1,i+3); stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
 end
+
+
+
+
+for i=1:3
+    figure;
+    stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
+    hold on;plot(yzad{i});
+    legend('Sygna³ wyjœciowy','Wartoœæ zadana');
+    matlab2tikz(    sprintf('PID_Y%d.tex',i)    ,'showInfo',false);
+end
+for i=1:4
+    figure;
+    stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
+    legend('Sygna³ steruj¹cy');
+    matlab2tikz(    sprintf('PID_U%d.tex',i)    ,'showInfo',false);
+end
+
 hold off
