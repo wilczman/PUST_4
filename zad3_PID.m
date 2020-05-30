@@ -3,9 +3,9 @@ clear all;
 % [5.13025718870210,5.00005693573576,0.000206770721584062]
 % [16.6637228561278,9.99507713207827,0.000188732555003929]
 % [8.33667801082710,5.00009137228757,0.000206455484624513]
-% K = [ 0.13 0.46 0.63]; 
-% Ti = [ 5.0 10 5.00];
-% Td = [0.0002 0.0002 0.0002];
+% K = [ 1 0.01 4]; 
+% Ti = [ 5.0 1 5.00];
+% Td = [0.0 0 0];
 % nastawy fmincon
 K = [ 0.0267924004841785 0.486626903336784 0.00731372418273780]; 
 Ti = [ 0.310555345098582 8.85550239529977 0.00166096196945139];
@@ -131,10 +131,9 @@ for i=1:3
 end   
 wskaznik_jakosci_ogolny = sum(e{1}.^2)+sum(e{2}.^2)+sum(e{3}.^2);
 % figure 
-hold on;
 for i=1:3
     subplot(7,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
-    hold on;plot(yzad{i});
+    hold on;plot(yzad{i});hold off
 end
 for i=1:4
     subplot(7,1,i+3); stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-5,5]);
@@ -143,18 +142,18 @@ end
 
 
 
-for i=1:3
-    figure;
-    stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
-    hold on;plot(yzad{i});
-    legend('Sygna³ wyjœciowy','Wartoœæ zadana');
-    matlab2tikz(    sprintf('PID_Y%d.tex',i)    ,'showInfo',false);
-end
-for i=1:4
-    figure;
-    stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
-    legend('Sygna³ steruj¹cy');
-    matlab2tikz(    sprintf('PID_U%d.tex',i)    ,'showInfo',false);
-end
+% for i=1:3
+%     figure;
+%     stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
+%     hold on;plot(yzad{i});
+%     legend('Sygna³ wyjœciowy','Wartoœæ zadana','Location','southeast');
+%     matlab2tikz(    sprintf('exp 2 PID_Y%d.tex',i)    ,'showInfo',false);
+% end
+% for i=1:4
+%     figure;
+%     stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
+%     legend('Sygna³ steruj¹cy','Location','southeast');
+%     matlab2tikz(    sprintf('exp 2 PID_U%d.tex',i)    ,'showInfo',false);
+% end
 
 hold off
