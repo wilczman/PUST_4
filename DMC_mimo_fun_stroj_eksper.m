@@ -1,6 +1,4 @@
-clear all
-close all
-    
+function wskaznik_jakosci=DMC_mimo_fun_stroj_eksper(parameters, save_flag) 
     
     ny=3;
     nu=4;
@@ -11,9 +9,10 @@ close all
     
     load('odp_skok.mat')
     
-    D=70; N=40; Nu=6;   %najlepsze parametry eksperymentalne
-    psi=[1 2 3];
-    lambda=[1 2 3 4];
+    D=parameters(1); N=parameters(2); Nu=parameters(3);
+    
+    psi=[1 1 1];
+    lambda=[1 1 1 1];
     
     u_max=100-Upp;
     u_min=0-Upp;
@@ -106,6 +105,7 @@ close all
     end
     bigPsi=diag(psiVector);
     
+    
     idx_end=0;
     for i=1:Nu
       idx_beg=idx_end+1;
@@ -179,16 +179,30 @@ close all
     end
 
 wskaznik_jakosci=sum(e_quad_sum);
-figure
-for i=1:3
-    subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
-    hold on;stairs(yzadCell{i});
-end
-hold off
 
-figure
-
-for i=1:4
-    subplot(4,1,i); stairs(U{i}); hold on;title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
+if save_flag==1
+    
+    f1=figure('visible','off');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    for i=1:3
+        subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
+        hold on;stairs(yzadCell{i});
+        legend('Sygna³ wyjœciowy','Wartoœæ zadana','Location','southeast');
+        matlab2tikz(    sprintf('DMC_Y%d_D=%d_N=%d_Nu=%d.tex', i,D, N, Nu)    ,'showInfo',false);
+    end
+    hold off
+    saveas(f1,sprintf('DMC_Y_D=%d_N=%d_Nu=%d', D, N, Nu),'png');
+    close(f1);
+    
+    f2=figure('visible','off');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    for i=1:4
+        subplot(4,1,i); stairs(U{i}); hold on;title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
+        legend('Sygna³ steruj¹cy','Location','southeast');
+        matlab2tikz(    sprintf('DMC_U%d_D=%d_N=%d_Nu=%d.tex', i,D, N, Nu)    ,'showInfo',false);
+    end
+    hold off
+    saveas(f2,sprintf('DMC_U_D=%d_N=%d_Nu=%d', D, N, Nu),'png');
+    close(f2);
 end
-hold off
+end

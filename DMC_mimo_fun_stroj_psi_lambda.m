@@ -1,6 +1,8 @@
-clear all
-close all
+function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
     
+    
+    psi=parameters(1:3);
+    lambda=parameters(4:7);
     
     ny=3;
     nu=4;
@@ -11,9 +13,8 @@ close all
     
     load('odp_skok.mat')
     
-    D=70; N=40; Nu=6;   %najlepsze parametry eksperymentalne
-    psi=[1 2 3];
-    lambda=[1 2 3 4];
+    D=70; N=40; Nu=6;
+    
     
     u_max=100-Upp;
     u_min=0-Upp;
@@ -39,7 +40,7 @@ close all
     Y{3}(1:11)=Ypp;
 
     e=zeros(kk, ny);
-    e_quad_sum=zeros(kk,1);
+    e_quad_sum=zeros(kk, 1);
     yzadCell{1}=zeros(1, kk);
     yzadCell{2}=zeros(1, kk);
     yzadCell{3}=zeros(1, kk);
@@ -106,6 +107,7 @@ close all
     end
     bigPsi=diag(psiVector);
     
+    
     idx_end=0;
     for i=1:Nu
       idx_beg=idx_end+1;
@@ -147,12 +149,12 @@ close all
         deltaUP((nu+1):nu*(D-1), 1)=deltaUP(1:nu*(D-1)-nu, 1);
         deltaUP(1:nu,1) = u(k-1,:)'-u(k-2,:)';
         
-        %zakomentowane linijki poni¿ej nie s¹ potrzebne do wersji
-        %oszczednej
-        %Y0=Y_wek+Mp*deltaUP;
-        %deltaU=K*(Yzad-Y0);
-        %deltaY=M*deltaU;      
-        %Y_ptak=Y0+deltaY;
+
+        Y0=Y_wek+Mp*deltaUP;
+        deltaU=K*(Yzad-Y0);
+        deltaY=M*deltaU;
+        
+        Y_ptak=Y0+deltaY;
         
         delta_u=K1*(Yzad-Y_wek-Mp*deltaUP);
         
@@ -175,20 +177,28 @@ close all
         for i=1:nu
             U{i}(k)=u(k,i)+Upp;
         end
-        yzad(k,:)=yzad(k,:)+Ypp;        
+        yzad(k,:)=yzad(k,:)+Ypp;
+        
+
     end
 
 wskaznik_jakosci=sum(e_quad_sum);
-figure
-for i=1:3
-    subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
-    hold on;stairs(yzadCell{i});
+if plot_flag==1
+   figure
+    for i=1:3
+        subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
+        hold on;stairs(yzadCell{i});
+        legend('Sygna³ wyjœciowy','Wartoœæ zadana','Location','southeast');
+        %matlab2tikz(    sprintf('DMC_Y%d_D=%d_N=%d_Nu=%d.tex', i,D, N, Nu)    ,'showInfo',false);
+    end
+    hold off
+    
+    figure
+    for i=1:4
+        subplot(4,1,i); stairs(U{i}); hold on;title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
+        legend('Sygna³ steruj¹cy','Location','southeast');
+        %matlab2tikz(    sprintf('DMC_U%d_D=%d_N=%d_Nu=%d.tex', i,D, N, Nu)    ,'showInfo',false);
+    end
+    hold off
+ end
 end
-hold off
-
-figure
-
-for i=1:4
-    subplot(4,1,i); stairs(U{i}); hold on;title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
-end
-hold off
