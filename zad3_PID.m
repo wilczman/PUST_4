@@ -3,9 +3,12 @@ clear all;
 % [5.13025718870210,5.00005693573576,0.000206770721584062]
 % [16.6637228561278,9.99507713207827,0.000188732555003929]
 % [8.33667801082710,5.00009137228757,0.000206455484624513]
-% K = [ 1 0.01 4]; 
-% Ti = [ 5.0 1 5.00];
-% Td = [0.0 0 0];
+% K = [ 7 0.72 0.01]; 
+% Ti = [ 24 32 6.59];
+% Td = [0 0 0];
+% K = [ 0.7 0.1 0.01]; 
+% Ti = [ 1 5 2];
+% Td = [0 0 0 ];
 % nastawy fmincon
 K = [ 0.0267924004841785 0.486626903336784 0.00731372418273780]; 
 Ti = [ 0.310555345098582 8.85550239529977 0.00166096196945139];
@@ -100,14 +103,16 @@ for k=5:kk %g³ówna pêtla symulacyjna
     
     %sygna³ steruj¹cy regulatora PID
     %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
-    for i=1:3
-        delta_u{i}= r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
-    end
     
+    
+    delta_u{1}= r2(1)*e{1}(k-2)+r1(1)*e{1}(k-1)+r0(1)*e{1}(k);
+    delta_u{2}= r2(2)*e{2}(k-2)+r1(2)*e{2}(k-1)+r0(2)*e{2}(k);
+    delta_u{3}= r2(3)*e{3}(k-2)+r1(3)*e{3}(k-1)+r0(3)*e{3}(k);
    
-    u{1}(k)=delta_u{1}+u{1}(k-1);
-    u{2}(k)=delta_u{2}+u{2}(k-1);
-    u{4}(k)=delta_u{3}+u{4}(k-1);
+    u{1}(k)=delta_u{1}  +u{1}(k-1);
+    u{2}(k)=delta_u{2}  +u{2}(k-1);
+    u{3}(k)=            +u{3}(k-1);
+    u{4}(k)=  delta_u{3}+ u{4}(k-1);
    
     
 %     if u(k)>u_max
@@ -121,6 +126,7 @@ for k=5:kk %g³ówna pêtla symulacyjna
 %     U{4}(k)=u{4}(k)+Upp;
     U{1}(k)=u{1}(k)+Upp;
     U{2}(k)=u{2}(k)+Upp;
+    U{3}(k)=u{3}(k)+Upp;
     U{4}(k)=u{4}(k)+Upp;
     
     
@@ -147,13 +153,13 @@ end
 %     stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
 %     hold on;plot(yzad{i});
 %     legend('Sygna³ wyjœciowy','Wartoœæ zadana','Location','southeast');
-%     matlab2tikz(    sprintf('exp 2 PID_Y%d.tex',i)    ,'showInfo',false);
+%     matlab2tikz(    sprintf('changed_u1y1u2y2u3y3PID_Y%d.tex',i)    ,'showInfo',false);
 % end
 % for i=1:4
 %     figure;
 %     stairs(U{i});title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');ylim([-8,8]);
 %     legend('Sygna³ steruj¹cy','Location','southeast');
-%     matlab2tikz(    sprintf('exp 2 PID_U%d.tex',i)    ,'showInfo',false);
+%     matlab2tikz(    sprintf('changed_u1y1u2y2u3y3PID_U%d.tex',i)    ,'showInfo',false);
 % end
 
 hold off

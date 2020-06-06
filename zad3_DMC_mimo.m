@@ -1,5 +1,5 @@
 clear all
-close all
+% close all
     
     
     ny=3;
@@ -11,12 +11,12 @@ close all
     
     load('odp_skok.mat')
     
-    D=70; N=40; Nu=6;   %najlepsze parametry eksperymentalne
-    psi=[1 2 3];
-    lambda=[1 2 3 4];
+    D=70; N=30; Nu=4;   %najlepsze parametry eksperymentalne
+    psi=[1 1 1];
+    lambda=[1 1 1 1];
     
-    u_max=100-Upp;
-    u_min=0-Upp;
+%     u_max=100-Upp;
+%     u_min=0-Upp;
     
     
     kk=400; %d³ugoœæ symulacji

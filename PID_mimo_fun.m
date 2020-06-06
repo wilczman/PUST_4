@@ -102,14 +102,16 @@ yzad{3}(3*kk/5:5*kk/5)=-2;
     
     %sygna³ steruj¹cy regulatora PID
     %u(k)=r2*e(k-2)+r1*e(k-1)+r0*e(k)+u(k-1);
-    for i=1:3
-        delta_u{i}= r2(i)*e{i}(k-2)+r1(i)*e{i}(k-1)+r0(i)*e{i}(k);
-    end
     
+    
+    delta_u{1}= r2(1)*e{1}(k-2)+r1(1)*e{1}(k-1)+r0(1)*e{1}(k);
+    delta_u{2}= r2(2)*e{2}(k-2)+r1(2)*e{2}(k-1)+r0(2)*e{2}(k);
+    delta_u{3}= r2(3)*e{3}(k-2)+r1(3)*e{3}(k-1)+r0(3)*e{3}(k);
    
-    u{1}(k)=delta_u{1}+u{1}(k-1);
-    u{2}(k)=delta_u{2}+u{2}(k-1);
-    u{4}(k)=delta_u{3}+u{4}(k-1);
+    u{1}(k)=delta_u{1}  +u{1}(k-1);
+    u{2}(k)=delta_u{2}  +u{2}(k-1);
+    u{3}(k)=delta_u{3}  +u{3}(k-1);
+    u{4}(k)=  u{4}(k-1);
    
     
 %     if u(k)>u_max
@@ -123,8 +125,8 @@ yzad{3}(3*kk/5:5*kk/5)=-2;
 %     U{4}(k)=u{4}(k)+Upp;
     U{1}(k)=u{1}(k)+Upp;
     U{2}(k)=u{2}(k)+Upp;
-    U{4}(k)=u{4}(k)+Upp;
-            
+    U{3}(k)=u{3}(k)+Upp;
+    U{4}(k)=u{4}(k)+Upp;     
         
     end
     wskaznik_jakosci=sum(e{1}.^2)+sum(e{2}.^2)+sum(e{3}.^2);
