@@ -9,7 +9,7 @@ save_flag=1; %1 jesli chcesz zapisac wykresy, 0 jesli nie
 strojony_parametr=3; %wybierz odpowiedni parametr
 
 %parametry poczatkowe byly 100 70 50
-parametry=[70 40 50];   %koncowe
+parametry=[70 45 50];   %koncowe
 
 switch strojony_parametr
     case 1

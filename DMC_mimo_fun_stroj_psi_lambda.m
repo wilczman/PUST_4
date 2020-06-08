@@ -1,8 +1,8 @@
 function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
     
+    lambda=parameters(1:4);
+    psi=parameters(5:7);
     
-    psi=parameters(1:3);
-    lambda=parameters(4:7);
     
     ny=3;
     nu=4;
@@ -11,7 +11,7 @@ function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
 %     u_max=100;
 %     u_min=0;
     
-    load('odp_skok.mat')
+    load('odp_skok_rw.mat')
     
     D=70; N=40; Nu=6;
     
@@ -70,10 +70,16 @@ function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
     
     S=cell(N+D-1,1);
     for i=1:N+D-1
-        S{i}=[odp_skok{1}{1}(i), odp_skok{2}{1}(i), odp_skok{3}{1}(i), odp_skok{4}{1}(i);...
-              odp_skok{1}{2}(i), odp_skok{2}{2}(i), odp_skok{3}{2}(i), odp_skok{4}{2}(i);...   
-              odp_skok{1}{3}(i), odp_skok{2}{3}(i), odp_skok{3}{3}(i), odp_skok{4}{3}(i)];
+        S{i}=[odp_skok_rw{1}{1}(i), odp_skok_rw{2}{1}(i), odp_skok_rw{3}{1}(i), odp_skok_rw{4}{1}(i);...
+              odp_skok_rw{1}{2}(i), odp_skok_rw{2}{2}(i), odp_skok_rw{3}{2}(i), odp_skok_rw{4}{2}(i);...   
+              odp_skok_rw{1}{3}(i), odp_skok_rw{2}{3}(i), odp_skok_rw{3}{3}(i), odp_skok_rw{4}{3}(i)];
     end
+    
+%     for i=1:900
+%     S(i)={[s11(i) s12(i) s13(i) s14(i);...
+%            s21(i) s22(i) s23(i) s24(i);...
+%            s31(i) s32(i) s33(i) s34(i)]};
+%     end
     
     Mcell=cell(N, Nu);
     for i=1:N
@@ -150,11 +156,11 @@ function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
         deltaUP(1:nu,1) = u(k-1,:)'-u(k-2,:)';
         
 
-        Y0=Y_wek+Mp*deltaUP;
-        deltaU=K*(Yzad-Y0);
-        deltaY=M*deltaU;
-        
-        Y_ptak=Y0+deltaY;
+%         Y0=Y_wek+Mp*deltaUP;
+%         deltaU=K*(Yzad-Y0);
+%         deltaY=M*deltaU;
+%         
+%         Y_ptak=Y0+deltaY;
         
         delta_u=K1*(Yzad-Y_wek-Mp*deltaUP);
         
@@ -185,6 +191,7 @@ function [wskaznik_jakosci]=DMC_mimo_fun_stroj_psi_lambda(parameters, plot_flag)
 wskaznik_jakosci=sum(e_quad_sum);
 if plot_flag==1
    figure
+   sgtitle({'Optymalizacja', sprintf('Lambda=[%.2f %.2f %.2f %.2f] psi=[%.2f %.2f %.2f]', lambda(1,:), psi(1,:))});
     for i=1:3
         subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
         hold on;stairs(yzadCell{i});

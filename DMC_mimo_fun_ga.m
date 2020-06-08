@@ -1,5 +1,7 @@
-clear all
-%close all
+function [wskaznik_jakosci]=DMC_mimo_fun_ga(parameters)
+    
+    lambda=parameters(1:4);
+    psi=parameters(5:7);
     
     
     ny=3;
@@ -11,19 +13,9 @@ clear all
     
     load('odp_skok_rw.mat')
     
-   D=70; N=45; Nu=6;   %najlepsze parametry eksperymentalne
-   psi=[1 1 1];
-   lambda=[7.35*10^(-8) 0.0002 0.0002 0.07];
-    psi=[1 1 1];
-     lambda=[1 1 1 1];
+    D=70; N=40; Nu=6;
     
-     %psi=[0.9    0.9    1 ];
-%     lambda=[4.8629    0.0089    0.0007    0.0009];
-%     load('optymalne_psi_lambda_DMC_zad4.mat', 'nastawy_DMC_psilambda_fmincon');
-%     psi=nastawy_DMC_psilambda_fmincon(5:7);
-%     lambda=nastawy_DMC_psilambda_fmincon(1:4);
-
-
+    
     u_max=100-Upp;
     u_min=0-Upp;
     
@@ -48,7 +40,7 @@ clear all
     Y{3}(1:11)=Ypp;
 
     e=zeros(kk, ny);
-    e_quad_sum=zeros(kk,1);
+    e_quad_sum=zeros(kk, 1);
     yzadCell{1}=zeros(1, kk);
     yzadCell{2}=zeros(1, kk);
     yzadCell{3}=zeros(1, kk);
@@ -78,11 +70,16 @@ clear all
     
     S=cell(N+D-1,1);
     for i=1:N+D-1
-        
         S{i}=[odp_skok_rw{1}{1}(i), odp_skok_rw{2}{1}(i), odp_skok_rw{3}{1}(i), odp_skok_rw{4}{1}(i);...
               odp_skok_rw{1}{2}(i), odp_skok_rw{2}{2}(i), odp_skok_rw{3}{2}(i), odp_skok_rw{4}{2}(i);...   
               odp_skok_rw{1}{3}(i), odp_skok_rw{2}{3}(i), odp_skok_rw{3}{3}(i), odp_skok_rw{4}{3}(i)];
     end
+    
+%     for i=1:900
+%     S(i)={[s11(i) s12(i) s13(i) s14(i);...
+%            s21(i) s22(i) s23(i) s24(i);...
+%            s31(i) s32(i) s33(i) s34(i)]};
+%     end
     
     Mcell=cell(N, Nu);
     for i=1:N
@@ -115,6 +112,7 @@ clear all
       psiVector(idx_beg:idx_end)=psi;     
     end
     bigPsi=diag(psiVector);
+    
     
     idx_end=0;
     for i=1:Nu
@@ -157,12 +155,12 @@ clear all
         deltaUP((nu+1):nu*(D-1), 1)=deltaUP(1:nu*(D-1)-nu, 1);
         deltaUP(1:nu,1) = u(k-1,:)'-u(k-2,:)';
         
-        %zakomentowane linijki poni¿ej nie s¹ potrzebne do wersji
-        %oszczednej
-        %Y0=Y_wek+Mp*deltaUP;
-        %deltaU=K*(Yzad-Y0);
-        %deltaY=M*deltaU;      
-        %Y_ptak=Y0+deltaY;
+
+        Y0=Y_wek+Mp*deltaUP;
+        deltaU=K*(Yzad-Y0);
+        deltaY=M*deltaU;
+        
+        Y_ptak=Y0+deltaY;
         
         delta_u=K1*(Yzad-Y_wek-Mp*deltaUP);
         
@@ -185,21 +183,10 @@ clear all
         for i=1:nu
             U{i}(k)=u(k,i)+Upp;
         end
-        yzad(k,:)=yzad(k,:)+Ypp;        
+        yzad(k,:)=yzad(k,:)+Ypp;
+        
+
     end
 
 wskaznik_jakosci=sum(e_quad_sum);
-figure
-sgtitle(sprintf('Lambda=[%.2f %.2f %.2f %.2f] psi=[%.2f %.2f %.2f]', lambda(1,:), psi(1,:)));
-for i=1:3
-    subplot(3,1,i); stairs(Y{i});title(sprintf('Wartoœæ wyjœcia Y%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
-    hold on;stairs(yzadCell{i});
 end
-hold off
-
-figure
-
-for i=1:4
-    subplot(4,1,i); stairs(U{i}); hold on;title(sprintf('Wartoœæ wejœcia U%d(k)',i));xlabel('k');ylabel('wartoœæ sygna³u');%ylim([-5,5]);
-end
-hold off

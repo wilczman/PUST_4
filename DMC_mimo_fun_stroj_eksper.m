@@ -7,7 +7,7 @@ function wskaznik_jakosci=DMC_mimo_fun_stroj_eksper(parameters, save_flag)
 %     u_max=100;
 %     u_min=0;
     
-    load('odp_skok.mat')
+    load('odp_skok_rw.mat')
     
     D=parameters(1); N=parameters(2); Nu=parameters(3);
     
@@ -68,9 +68,10 @@ function wskaznik_jakosci=DMC_mimo_fun_stroj_eksper(parameters, save_flag)
     
     S=cell(N+D-1,1);
     for i=1:N+D-1
-        S{i}=[odp_skok{1}{1}(i), odp_skok{2}{1}(i), odp_skok{3}{1}(i), odp_skok{4}{1}(i);...
-              odp_skok{1}{2}(i), odp_skok{2}{2}(i), odp_skok{3}{2}(i), odp_skok{4}{2}(i);...   
-              odp_skok{1}{3}(i), odp_skok{2}{3}(i), odp_skok{3}{3}(i), odp_skok{4}{3}(i)];
+        
+        S{i}=[odp_skok_rw{1}{1}(i), odp_skok_rw{2}{1}(i), odp_skok_rw{3}{1}(i), odp_skok_rw{4}{1}(i);...
+              odp_skok_rw{1}{2}(i), odp_skok_rw{2}{2}(i), odp_skok_rw{3}{2}(i), odp_skok_rw{4}{2}(i);...   
+              odp_skok_rw{1}{3}(i), odp_skok_rw{2}{3}(i), odp_skok_rw{3}{3}(i), odp_skok_rw{4}{3}(i)];
     end
     
     Mcell=cell(N, Nu);
